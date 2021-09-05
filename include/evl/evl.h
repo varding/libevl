@@ -22,7 +22,7 @@
 
 #define __EVL__  18	/* API version */
 
-#define EVL_ABI_PREREQ  26
+#define EVL_ABI_PREREQ  27
 
 struct evl_version {
 	int api_level;	/* libevl.so: __EVL__ */
