@@ -15,6 +15,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <linux/types.h>
+#include <valgrind/valgrind.h>
 #include <evl/evl.h>
 #include <evl/syscall.h>
 #include <evl/thread.h>
@@ -182,6 +183,13 @@ void evl_sigdebug_handler(int sig, siginfo_t *si, void *ctxt)
 
 static void resolve_vdso_calls(void)
 {
+	/*
+	 * We have no vDSO if running Valgrind, always use fallback
+	 * calls.
+	 */
+	if (RUNNING_ON_VALGRIND)
+		return;
+
 	evl_init_vdso();
 
 	__evl_clock_gettime = evl_request_vdso(__EVL_VDSO_KVERSION,
