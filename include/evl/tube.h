@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Philippe Gerum  <rpm@xenomai.org>
  *
- * The tube: a lighweight, lockless multi-reader/multi-writer FIFO
+ * The tube: a lighweight, lockless single-reader/single-writer FIFO
  * with a base-offset addressing variant which can work over a memory
  * segment shared between processes (*_rel form).
  */
