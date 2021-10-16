@@ -19,6 +19,10 @@
 	})
 #endif
 
+#ifdef alignof
+#define alignof(__x)	__alignof__(__x)
+#endif
+
 #ifndef __stringify
 #define __stringify_1(x...)	#x
 #define __stringify(x...)	__stringify_1(x)
@@ -38,6 +42,10 @@
 
 #ifndef __maybe_unused
 #define __maybe_unused	__attribute__((__unused__))
+#endif
+
+#ifndef __always_inline
+#define __always_inline	__attribute__((__always_inline__))
 #endif
 
 #ifndef __aligned

@@ -87,6 +87,19 @@ foreach t : test_programs_with_m
 )
 endforeach
 
+test_programs_with_atomic = [
+    'ring-spray',
+]
+
+atomic_dep = cc.find_library('atomic', required : true)
+foreach t : test_programs_with_atomic
+    x = executable(t, t + '.c',
+    install : true,
+    install_dir : 'tests',
+    dependencies : [ libtest_dep, libevl_dep, atomic_dep ]
+)
+endforeach
+
 test_eshi_programs = [
     'clock-timer-periodic',
     'detach-self',

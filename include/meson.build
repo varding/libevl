@@ -31,6 +31,7 @@ libevl_headers = [
     'evl/observable.h',
     'evl/poll.h',
     'evl/proxy.h',
+    'evl/ring_ptr.h',
     'evl/sched.h',
     'evl/sem.h',
     'evl/syscall.h',
