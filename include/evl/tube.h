@@ -6,6 +6,8 @@
  * The tube: a lighweight, lockless single-reader/single-writer FIFO
  * with a base-offset addressing variant which can work over a memory
  * segment shared between processes (*_rel form).
+ *
+ * CAUTION: This interface is DEPRECATED, and WILL BE REMOVED.
  */
 
 #ifndef _EVL_TUBE_H
@@ -17,6 +19,11 @@
 #include <stdlib.h>
 #include <evl/compiler.h>
 #include <evl/atomic.h>
+
+static inline __deprecated void evl_tube_deprecated(void)
+{
+	/* Switch to EVL ring <evl/ring.h> instead. */
+}
 
 /*
  * The tricky one: pulling a canister from the tube. The noticeable
@@ -172,6 +179,7 @@
 	do {							\
 		typeof((__tube)->pending.tail) __i;		\
 		int __n;					\
+		evl_tube_deprecated();				\
 		*(__tube) = (typeof(*(__tube)))			\
 			TUBE_INITIALIZER(*(__tube));		\
 		for (__n = 0, __i = (typeof(__i))(__freevec);	\
@@ -323,6 +331,7 @@
 	({								\
 		struct __name *__tube = (typeof(__tube))(__mem);	\
 		typeof(__tube->free.first[0]) *__i, *__iend;		\
+		evl_tube_deprecated();					\
 		*__tube = (typeof(*__tube))				\
 			TUBE_INITIALIZER_REL(*__tube, __can_struct);	\
 		__iend = (typeof(__iend))((char *)__mem + __size);	\

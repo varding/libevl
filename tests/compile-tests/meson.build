@@ -15,7 +15,6 @@ cplus_test_programs = [
     'socket',
     'thread',
     'timer',
-    'tube',
     'xbuf',
 ]
 
