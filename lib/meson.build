@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: MIT
+
+libevl_sources = [
+    'clock.c',
+    'event.c',
+    'flags.c',
+    'heap.c',
+    'init.c',
+    'internal.c',
+    'mutex.c',
+    'observable.c',
+    'parse_vdso.c',
+    'poll.c',
+    'proxy.c',
+    'sched.c',
+    'sem.c',
+    'socket.c',
+    'thread.c',
+    'timer.c',
+    'version.c',
+    'xbuf.c',
+]
+
+libsys = static_library('syscalls', 'syscall.c',
+    include_directories : [ libevl_incdirs ],
+    c_args : '-fomit-frame-pointer'
+)
+libsys_dep = declare_dependency(link_with : libsys)
+
+stamp_generator = find_program('generate-git-stamp.sh',
+    dirs : libevl_scripts,
+    required : true
+)
+
+git_stamp_h = custom_target(
+    'git_stamp.h',
+    output : 'git_stamp.h',
+    input : meson.project_source_root() / '.git',
+    build_always_stale : true,
+    command : [ stamp_generator, '@INPUT@', '@OUTPUT@' ],
+)
+libevl_sources += git_stamp_h
+
+libevl = both_libraries('evl', libevl_sources,
+     include_directories : [ libevl_incdirs ],
+     c_args : [ '-DLIBVERSION="' + libevl_version + '"' ],
+     install : true,
+     version : libevl_version,
+     dependencies : [ libsys_dep, pthread_dep, rt_dep ],
+)
+
+libevl_dep = declare_dependency(link_with : libevl,
+  include_directories : [ libevl_incdirs ],
+  dependencies : [ pthread_dep, rt_dep ],
+)

@@ -5,7 +5,7 @@
  */
 
 #include <evl/evl.h>
-#include "git-stamp.h"
+#include "git_stamp.h"
 
 #ifndef GIT_STAMP
 #define git_hash  ""
@@ -18,6 +18,6 @@ struct evl_version evl_get_version(void)
 	return (struct evl_version){
 		.api_level = __EVL__,
 		.abi_level = -1,
-		.version_string = "eshi." LIBSERIAL git_hash,
+		.version_string = "eshi." LIBVERSION git_hash,
 		};
 }
