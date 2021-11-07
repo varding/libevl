@@ -14,24 +14,24 @@ typedef struct { __s32 val; } atomic_t;
 #define ATOMIC_INIT(__val) { (__val) }
 
 /* For scalar types only! */
-#define atomic_store(__ptr, __val)				\
+#define __atomic_set(__ptr, __val)				\
 	do {							\
 		(*(volatile typeof(__ptr))(__ptr)) = (__val);	\
 	} while (0)
 
-#define atomic_load(__ptr)					\
+#define __atomic_read(__ptr)					\
 	({							\
 		(*(volatile typeof(__ptr))(__ptr));		\
 	})
 
 static inline int atomic_read(const atomic_t *ptr)
 {
-	return atomic_load(&ptr->val);
+	return __atomic_read(&ptr->val);
 }
 
 static inline void atomic_set(atomic_t *ptr, int val)
 {
-	atomic_store(&ptr->val, val);
+	__atomic_set(&ptr->val, val);
 }
 
 #ifndef atomic_cmpxchg

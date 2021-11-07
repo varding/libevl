@@ -61,14 +61,14 @@
 	({								\
 		typeof((__desc)->head) __next_dq, __head_dq;		\
 		do {							\
-			__head_dq = atomic_load(&(__desc)->head);	\
+			__head_dq = __atomic_read(&(__desc)->head);	\
 			if (__head_dq == NULL)				\
 				break;					\
-			__next_dq = atomic_load(&(__head_dq)->next);	\
+			__next_dq = __atomic_read(&(__head_dq)->next);	\
 		} while (!__sync_bool_compare_and_swap(			\
 				&(__desc)->head, __head_dq, __next_dq)); \
 		if (__head_dq && __next_dq == NULL) {			\
-			atomic_store(&(__desc)->head, __head_dq);	\
+			__atomic_set(&(__desc)->head, __head_dq);	\
 			__head_dq = NULL;				\
 		}							\
 		__head_dq;						\
@@ -86,10 +86,10 @@
 #define tube_push_prepare(__desc, __free)				\
   ({									\
 		typeof((__desc)->tail) __old_qp;			\
-		atomic_store(&(__free)->next, NULL);			\
+		__atomic_set(&(__free)->next, NULL);			\
 		smp_mb();						\
 		do {							\
-			__old_qp = atomic_load(&(__desc)->tail);	\
+			__old_qp = __atomic_read(&(__desc)->tail);	\
 		} while (!__sync_bool_compare_and_swap(			\
 				&(__desc)->tail, __old_qp, __free));	\
 		__old_qp;						\
@@ -106,7 +106,7 @@
 #define tube_push_finish(__desc, __new, __free)		\
 	do {						\
 		smp_mb();				\
-		atomic_store(&(__new)->next, __free);	\
+		__atomic_set(&(__new)->next, __free);	\
 	} while (0)
 
 #define tube_push(__desc, __free)				\
@@ -214,10 +214,10 @@
 	({								\
 		typeof((__desc)->tail) __old_qp;			\
 		uintptr_t __off_qp = __memoff(__base, __free);		\
-		atomic_store(&(__free)->next, 0);			\
+		__atomic_set(&(__free)->next, 0);			\
 		smp_mb();						\
 		do {							\
-			__old_qp = atomic_load(&(__desc)->tail);	\
+			__old_qp = __atomic_read(&(__desc)->tail);	\
 		} while (__sync_val_compare_and_swap(			\
 				&(__desc)->tail,			\
 				__old_qp, __off_qp) != __old_qp);	\
@@ -230,18 +230,18 @@
 		typeof((__desc)->head) __next_dq, __head_dq;		\
 		typeof((__desc)->first[0]) *__head_dqptr;		\
 		do {							\
-			__head_dq = atomic_load(&(__desc)->head);	\
+			__head_dq = __atomic_read(&(__desc)->head);	\
 			if (__head_dq == 0) {				\
 				__head_dqptr = NULL;			\
 				break;					\
 			}						\
 			__head_dqptr = (typeof(__head_dqptr))		\
 				__memptr(__base, __head_dq);		\
-			__next_dq = atomic_load(&(__head_dqptr)->next);	\
+			__next_dq = __atomic_read(&(__head_dqptr)->next); \
 		} while (!__sync_bool_compare_and_swap(			\
 				&(__desc)->head, __head_dq, __next_dq)); \
 		if (__head_dq && __next_dq == 0) {			\
-			atomic_store(&(__desc)->head, __head_dq);	\
+			__atomic_set(&(__desc)->head, __head_dq);	\
 			__head_dqptr = NULL;				\
 		}							\
 		__head_dqptr;						\
@@ -250,7 +250,7 @@
 #define tube_push_finish_rel(__base, __desc, __new, __free)		\
 	do {								\
 		smp_mb();						\
-		atomic_store(&(__new)->next, __memoff(__base, __free));	\
+		__atomic_set(&(__new)->next, __memoff(__base, __free));	\
 	} while (0)
 
 #define tube_push_rel(__base, __desc, __free)				\
