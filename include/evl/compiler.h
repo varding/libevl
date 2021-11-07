@@ -52,6 +52,10 @@
 #define __packed	__attribute__((__packed__))
 #endif
 
+#ifndef __fallthrough
+#define fallthrough	__attribute__((__fallthrough__))
+#endif
+
 #ifndef __alloc_size
 #define __alloc_size(__args)	__attribute__((__alloc_size__(__args)))
 #endif

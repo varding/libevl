@@ -16,6 +16,7 @@
 #include <sched.h>
 #include <evl/evl.h>
 #include <evl/thread.h>
+#include <evl/compiler.h>
 #include <linux/types.h>
 #include <uapi/evl/factory.h>
 #include <uapi/evl/control.h>
@@ -110,7 +111,7 @@ int evl_attach_thread(int flags, const char *fmt, ...)
 		break;
 	default:
 		policy = SCHED_FIFO;
-		/* Fallback wanted. */
+		fallthrough;
 	case SCHED_FIFO:
 	case SCHED_RR:
 		priority = param.sched_priority;
