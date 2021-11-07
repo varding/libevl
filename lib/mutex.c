@@ -50,7 +50,7 @@ static int init_mutex_vargs(struct evl_mutex *mutex,
 	 */
 	if (protocol == EVL_GATE_PP) {
 		ret = sched_get_priority_max(SCHED_FIFO);
-		if (ret < 0 || ceiling == 0 || ceiling > ret)
+		if (ret < 0 || ceiling == 0 || ceiling > (unsigned int)ret)
 			return -EINVAL;
 	}
 
@@ -365,7 +365,7 @@ int evl_set_mutex_ceiling(struct evl_mutex *mutex,
 		return -EINVAL;
 
 	ret = sched_get_priority_max(SCHED_FIFO);
-	if (ret < 0 || ceiling > ret)
+	if (ret < 0 || ceiling > (unsigned int)ret)
 		return -EINVAL;
 
 	if (mutex->magic == __MUTEX_UNINIT_MAGIC) {

@@ -865,7 +865,7 @@ static void add_page_front(struct evl_heap *heap,
 
 static void remove_page(struct evl_heap *heap,
 			struct evl_heap_extent *ext,
-			int pg, int log2size)
+			unsigned int pg, int log2size)
 {
 	struct evl_heap_pgentry *old, *prev, *next;
 	int ilog = log2size - EVL_HEAP_MIN_LOG2;
@@ -887,7 +887,7 @@ static void remove_page(struct evl_heap *heap,
 
 static void move_page_front(struct evl_heap *heap,
 			    struct evl_heap_extent *ext,
-			    int pg, int log2size)
+			    unsigned int pg, int log2size)
 {
 	int ilog = log2size - EVL_HEAP_MIN_LOG2;
 
@@ -902,7 +902,7 @@ static void move_page_front(struct evl_heap *heap,
 
 static void move_page_back(struct evl_heap *heap,
 			   struct evl_heap_extent *ext,
-			   int pg, int log2size)
+			   unsigned int pg, int log2size)
 {
 	struct evl_heap_pgentry *old, *last, *head, *next;
 	int ilog;
@@ -1070,9 +1070,10 @@ out:
 
 int evl_free_block(struct evl_heap *heap, void *block)
 {
-	int log2size, ret = 0, pg, n;
 	struct evl_heap_extent *ext;
 	unsigned long pgoff, boff;
+	int log2size, ret = 0, n;
+	unsigned int pg;
 	uint32_t oldmap;
 	size_t bsize;
 
