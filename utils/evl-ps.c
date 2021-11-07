@@ -218,8 +218,8 @@ static int scan_thread(const char *fpath, const struct stat *sb,
 	bool parse_ok = false;
 	char *name, *buf, *p;
 	ENTRY entry, *e;
+	unsigned int n;
 	FILE *fp;
-	int n;
 
 	if (typeflag == FTW_D && !strcmp(fpath + ftwbuf->base, "clone"))
 		return FTW_SKIP_SUBTREE;
