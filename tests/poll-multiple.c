@@ -139,12 +139,12 @@ int main(int argc, char *argv[])
 	for (n = 0; n < FEED_COUNT; n++) {
 		__Tcall_assert(nr, evl_poll(pollfd, pollset, NR_FEEDERS));
 		for (m = 0; m < nr; m++) {
-			if (pollset[m].fd == tmfd) {
+			if ((int)pollset[m].fd == tmfd) {
 				__Tcall_errno_assert(ret,
 					oob_read(tmfd, &ticks, sizeof(ticks)));
-			} else if (pollset[m].fd == c[0].efd) {
+			} else if ((int)pollset[m].fd == c[0].efd) {
 				__Tcall_assert(ret, evl_get_sem(&c[0].sem));
-			} else if (pollset[m].fd == c[1].efd) {
+			} else if ((int)pollset[m].fd == c[1].efd) {
 				__Tcall_assert(ret, evl_wait_flags(&c[1].flags, &bits));
 			}
 		}

@@ -22,7 +22,7 @@ static void *polling_thread(void *arg)
 
 	__Tcall_assert(tfd, evl_attach_self("poller-polling:%d", getpid()));
 	__Tcall_assert(ret, evl_poll(pfd, &pollset, 1));
-	__Texpr_assert(pollset.fd == xfd);
+	__Texpr_assert((int)pollset.fd == xfd);
 	__Texpr_assert(pollset.events & POLLNVAL);
 
 	return NULL;

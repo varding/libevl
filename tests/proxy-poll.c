@@ -17,8 +17,8 @@
 #include <evl/syscall.h>
 #include "helpers.h"
 
-#define TEST_VALUE1 0x55aa2711
-#define TEST_VALUE2 0xff774421
+#define TEST_VALUE1 ((int)0x55aa2711)
+#define TEST_VALUE2 ((int)0xff774421)
 
 static int evntfd, proxyfd;
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
 	__Tcall_errno_assert(ret, read(evntfd, &val, sizeof(val)));
 	__Texpr_assert(ret == sizeof(val));
-	__Texpr_assert(val == TEST_VALUE2);
+	__Texpr_assert(val == (uint64_t)TEST_VALUE2);
 
 	pthread_join(tid, NULL);
 

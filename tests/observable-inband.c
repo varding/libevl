@@ -20,7 +20,7 @@
 
 #define MAX_THREADS 8
 #define BACKLOG_DEPTH 4096
-#define TERMINATOR 0xa5a5a5a5a5a5a5a5ULL
+#define TERMINATOR ((int64_t)0xa5a5a5a5a5a5a5a5)
 
 #define LOW_PRIO   1
 

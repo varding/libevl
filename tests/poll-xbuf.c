@@ -61,8 +61,9 @@ int main(int argc, char *argv[])
 	struct evl_poll_event pollset;
 	char *name, *path, buf[16];
 	struct sched_param param;
-	int tfd, xfd, pfd, n;
+	int tfd, xfd, pfd;
 	pthread_t writer;
+	unsigned int n;
 	ssize_t ret;
 
 	param.sched_priority = 1;
@@ -90,9 +91,9 @@ int main(int argc, char *argv[])
 		__Tcall_assert(ret, evl_poll(pfd, &pollset, 1));
 		__Texpr_assert(ret == 1);
 		__Texpr_assert(pollset.events == POLLIN);
-		__Texpr_assert(pollset.fd == xfd);
+		__Texpr_assert((int)pollset.fd == xfd);
 		ret = oob_read(xfd, buf, sizeof(buf) - 1);
-		__Texpr_assert(ret > 0 && ret < sizeof(buf));
+		__Texpr_assert(ret > 0 && (size_t)ret < sizeof(buf));
 		buf[ret] = '\0';
 		__Texpr_assert(strncmp(msg[n], buf, strlen(msg[n])) == 0);
 	}

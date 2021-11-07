@@ -48,11 +48,11 @@ static void *observable_poller(void *arg)
 		__Tcall_assert(ret, evl_poll(pollfd_in, &pollset, 1));
 		__Texpr_assert(ret == 1);
 		__Texpr_assert(pollset.events == POLLIN);
-		__Texpr_assert(pollset.fd == ofd);
+		__Texpr_assert((int)pollset.fd == ofd);
 		__Tcall_assert(ret, evl_read_observable(ofd, &nf, 1));
 		__Texpr_assert(ret == 1);
 		__Texpr_assert(nf.tag == EVL_NOTICE_USER);
-		__Texpr_assert(nf.event.val == 0xa5a5a5a5);
+		__Texpr_assert(nf.event.val == (int)0xa5a5a5a5);
 	}
 
 	return NULL;

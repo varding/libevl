@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
 			__Tcall_assert(ret, evl_poll(pfd, &pollset, 1));
 			__Texpr_assert(ret == 1);
 			__Texpr_assert(pollset.events == POLLOUT);
-			__Texpr_assert(pollset.fd == ofd);
+			__Texpr_assert((int)pollset.fd == ofd);
 		}
 	}
 

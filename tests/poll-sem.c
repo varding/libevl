@@ -42,7 +42,7 @@ static void *sem_poller(void *arg)
 		__Tcall_assert(ret, evl_poll(pollfd_in, &pollset, 1));
 		__Texpr_assert(ret == 1);
 		__Texpr_assert(pollset.events == POLLIN);
-		__Texpr_assert(pollset.fd == sfd);
+		__Texpr_assert((int)pollset.fd == sfd);
 		__Tcall_assert(ret, evl_tryget_sem(&sem));
 	}
 

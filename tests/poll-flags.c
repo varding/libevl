@@ -32,7 +32,8 @@ static void *flags_poller(void *arg)
 	struct evl_poll_event pollset;
 	struct test_context *p = arg;
 	struct timespec now, timeout;
-	int ret, tfd, bits;
+	unsigned int bits;
+	int ret, tfd;
 
 	__Tcall_assert(tfd, evl_attach_self("monitor-flags-poller:%d.%d",
 			getpid(), p->serial));
@@ -41,7 +42,7 @@ static void *flags_poller(void *arg)
 		__Tcall_assert(ret, evl_poll(pollfd_in, &pollset, 1));
 		__Texpr_assert(ret == 1);
 		__Texpr_assert(pollset.events == POLLIN);
-		__Texpr_assert(pollset.fd == ffd);
+		__Texpr_assert((int)pollset.fd == ffd);
 		evl_read_clock(EVL_CLOCK_MONOTONIC, &now);
 		timespec_add_ns(&timeout, &now, 1000000000);
 		__Tcall_assert(ret, evl_timedwait_flags(&flags, &timeout, &bits));
@@ -83,9 +84,9 @@ int main(int argc, char *argv[])
 	for (n = 1; n != 0; n <<= 1) {
 		/* Wait for the flag group to be clear. */
 		__Tcall_assert(ret, evl_poll(pollfd_out, &pollset, 1));
-		__Texpr_assert(ret == 1);
+		__Texpr_assert(ret == 1L);
 		__Texpr_assert(pollset.events == POLLOUT);
-		__Texpr_assert(pollset.fd == ffd);
+		__Texpr_assert((int)pollset.fd == ffd);
 		/* Then post the next pattern. */
 		__Tcall_assert(ret, evl_post_flags(&flags, n));
 	}
