@@ -184,7 +184,7 @@ void evl_sigdebug_handler(int sig, siginfo_t *si, void *ctxt)
 static void resolve_vdso_calls(void)
 {
 	/*
-	 * We have no vDSO if running Valgrind, always use fallback
+	 * We have no vDSO if running on Valgrind, always use fallback
 	 * calls.
 	 */
 	if (RUNNING_ON_VALGRIND)
