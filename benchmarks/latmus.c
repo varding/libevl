@@ -29,6 +29,7 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <evl/compiler.h>
 #include <evl/evl.h>
 #include <linux/gpio.h>
 #include <uapi/evl/devices/latmus.h>
@@ -1251,10 +1252,10 @@ int main(int argc, char *const argv[])
 			switch (*endptr) {
 			case 'd':
 				timeout *= 24;
-				/* Falldown wanted. */
+				fallthrough;
 			case 'h':
 				timeout *= 60;
-				/* Falldown wanted. */
+				fallthrough;
 			case 'm':
 				timeout *= 60;
 				break;

@@ -24,6 +24,7 @@
 #include <setjmp.h>
 #include <getopt.h>
 #include <sys/ioctl.h>
+#include <evl/compiler.h>
 #include <evl/evl.h>
 #include <uapi/asm/evl/fptest.h>
 #include <uapi/evl/devices/hectic.h>
@@ -335,6 +336,7 @@ static void *sleeper_switcher(void *cookie)
 			break;
 		case 1:
 			handle_bad_fpreg(param->cpu, ~0, -1);
+			fallthrough;
 		case -1:
 			clean_exit(EXIT_FAILURE);
 		}
@@ -467,6 +469,7 @@ static void *rtup(void *cookie)
 			break;
 		case 1:
 			handle_bad_fpreg(param->cpu, ~0, -1);
+			fallthrough;
 		case -1:
 			clean_exit(EXIT_FAILURE);
 		}
@@ -546,6 +549,7 @@ static void *rtus(void *cookie)
 			break;
 		case 1:
 			handle_bad_fpreg(param->cpu, ~0, -1);
+			fallthrough;
 		case -1:
 			clean_exit(EXIT_FAILURE);
 		}
@@ -642,6 +646,7 @@ static void *rtuo(void *cookie)
 			break;
 		case 1:
 			handle_bad_fpreg(param->cpu, ~0, -1);
+			fallthrough;
 		case -1:
 			clean_exit(EXIT_FAILURE);
 		}
@@ -806,7 +811,7 @@ static int task_create(struct cpu_tasks *cpu,
 	case RTUS:
 	case RTUO:
 		param->swt.flags = HECTIC_OOB_WAIT;
-		/* fallthrough wanted. */
+		fallthrough;
 	case SLEEPER:
 	case SWITCHER:
 		err = ioctl(cpu->fd, EVL_HECIOC_REGISTER_UTASK, &param->swt);
