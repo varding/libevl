@@ -74,7 +74,7 @@ struct cpu_tasks {
 	struct task_params *tasks;
 	unsigned tasks_count;
 	unsigned capacity;
-	unsigned fd;
+	int fd;
 	unsigned long last_switches_count;
 };
 
@@ -164,7 +164,7 @@ static void handle_bad_fpreg(struct cpu_tasks *cpu, unsigned fp_val,
 
 	ioctl(cpu->fd, EVL_HECIOC_GET_LAST_ERROR, &err);
 
-	if (fp_val == ~0)
+	if (fp_val == ~0U)
 		fp_val = err.fp_val;
 
 	from = err.last_switch.from;
@@ -690,7 +690,8 @@ static int parse_arg(struct task_params *param,
 	unsigned i;
 	int n;
 
-	param->type = param->fp = 0;
+	param->type = SLEEPER;
+	param->fp = 0;
 	param->cpu = &cpus[0];
 
 	for(i = 0; i < sizeof(type2flags)/sizeof(struct t2f); i++) {
@@ -1134,13 +1135,13 @@ fail:
 
 int main(int argc, const char *argv[])
 {
-	unsigned i, j, n, use_fp = 1, stress = 0;
+	unsigned j, use_fp = 1, stress = 0;
 	const char *progname = argv[0];
 	pthread_attr_t rt_attr;
 	struct cpu_tasks *cpus;
 	struct sched_param sp;
+	int sig, fd, c, n, i;
 	char buf[BUFSIZ];
-	int sig, fd, c;
 	sigset_t mask;
 
 	status = EXIT_SUCCESS;
@@ -1432,7 +1433,7 @@ int main(int argc, const char *argv[])
 	clock_gettime(CLOCK_REALTIME, &start);
 
 	/* Start the sleeper tasks. */
-	for (i = 0; i < nr_cpus; i ++)
+	for (i = 0; (unsigned int)i < nr_cpus; i ++)
 		sem_post(&sleeper_start);
 
 	/* Wait for interruption. */

@@ -249,7 +249,7 @@ static int data_lines = 21;
 
 static int32_t *histogram;
 
-static unsigned int histogram_cells = 200;
+static size_t histogram_cells = 200;
 
 static struct latmus_measurement last_bulk;
 
@@ -604,7 +604,7 @@ static ssize_t read_net_data(void *buf, size_t len)
 		if (ret <= 0)
 			return ret;
 		count += ret;
-	} while (count < len);
+	} while (count < (ssize_t)len);
 
 	return count;
 }
@@ -615,7 +615,7 @@ static void *sock_logger_thread(void *arg)
 	struct latmon_net_data ndata;
 	bool *no_response = arg;
 	ssize_t ret, round = 0;
-	int cell;
+	size_t cell;
 
 	for (;;) {
 		ret = read_net_data(&ndata, sizeof(ndata));
@@ -786,7 +786,7 @@ static void dump_gnuplot(time_t duration)
 	fprintf(plot_fp, "# sample count: %lld\n",
 		(long long)all_samples);
 
-	for (n = 0; n < histogram_cells && histogram[n] == 0; n++)
+	for (n = 0; (size_t)n < histogram_cells && histogram[n] == 0; n++)
 		;
 	first = n;
 
@@ -802,7 +802,7 @@ static void dump_gnuplot(time_t duration)
 	 * index.
 	 */
 	fprintf(plot_fp, "%d%s %d\n", last,
-		all_maxlat / 1000 >= histogram_cells ? "+" : "",
+		(size_t)(all_maxlat / 1000) >= histogram_cells ? "+" : "",
 		histogram[last]);
 }
 
