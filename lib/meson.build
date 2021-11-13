@@ -32,12 +32,12 @@ stamp_generator = find_program('generate-git-stamp.sh',
     required : true
 )
 
+gitdir = meson.project_source_root() / '.git'
 git_stamp_h = custom_target(
     'git_stamp.h',
     output : 'git_stamp.h',
-    input : meson.project_source_root() / '.git',
     build_always_stale : true,
-    command : [ stamp_generator, '@INPUT@', '@OUTPUT@' ],
+    command : [ stamp_generator, gitdir , '@OUTPUT@' ],
 )
 libevl_sources += git_stamp_h
 
