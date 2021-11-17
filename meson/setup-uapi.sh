@@ -1,7 +1,7 @@
 #! /bin/sh
 
-if test \! -d $UAPI; then
-    echo "meson: path given to -Duapi does not look right"
+if test \! -d $UAPI/include/uapi/evl; then
+    echo "meson: path given to -Duapi does not look right ($UAPI/include/uapi/evl is missing)"
     exit 1
 fi
 
