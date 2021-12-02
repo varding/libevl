@@ -104,10 +104,6 @@ int main(int argc, char *const argv[])
 		optind = argc - 1;
 		usage();
 	} else {
-		if (c == '?') {
-			usage();
-			return 2;
-		}
 		cmd = argv[optind];
 	}
 
