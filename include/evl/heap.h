@@ -34,7 +34,6 @@
 #define EVL_HEAP_PGMAP_BYTES	sizeof(struct evl_heap_pgentry)
 
 struct avlh {
-	unsigned int flags : 28;
 	int type : 2;
 	int balance : 2;
 	struct avlh *link[3];
