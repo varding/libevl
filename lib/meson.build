@@ -41,7 +41,7 @@ git_stamp_h = custom_target(
 )
 libevl_sources += git_stamp_h
 
-libevl = both_libraries('evl', libevl_sources,
+libevl = both_libraries('libevl', libevl_sources,
      include_directories : [ libevl_incdirs ],
      c_args : [ '-DLIBVERSION="' + libevl_version + '"' ],
      install : true,
@@ -52,4 +52,9 @@ libevl = both_libraries('evl', libevl_sources,
 libevl_dep = declare_dependency(link_with : libevl,
   include_directories : [ libevl_incdirs ],
   dependencies : [ pthread_dep, rt_dep ],
+)
+
+pkg = import('pkgconfig')
+pkg.generate(libevl,
+    description : 'API library and utilities for EVL'
 )
